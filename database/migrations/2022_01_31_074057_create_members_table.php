@@ -15,9 +15,10 @@ class CreateMembersTable extends Migration
     {
         Schema::create('member', function (Blueprint $table) {
             $table->id();
-            $table->string("nama",100);
-            $table->enum("jenis_kelamin",['L','P']);
-            $table->string("tlp",15);
+            $table->string('nama',100);
+            $table->text('alamat');
+            $table->enum('jenis_kelamin',['L','P']);
+            $table->string('tlp',20);
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateMembersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('members');
+        Schema::dropIfExists('member');
     }
 }

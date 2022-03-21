@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\paket;
-use App\Http\Requests\StorepaketRequest;
-use App\Http\Requests\UpdatepaketRequest;
+use App\Models\Paket;
+use App\Models\Outlet;
+use App\Http\Requests\PaketRequest;
 
 class PaketController extends Controller
 {
@@ -15,7 +15,14 @@ class PaketController extends Controller
      */
     public function index()
     {
-        //
+        $items = Paket::join('outlet', 'paket.id_outlet', '=', 'outlet.id')->select('paket.*', 'outlet.nama')->orderBy('outlet.nama')->get();
+
+        $outlet = Outlet::orderBy('nama')->get();
+
+        return view('paket.index')->with([
+            'items' => $items,
+            'outlet' => $outlet
+        ]);
     }
 
     /**
@@ -31,12 +38,15 @@ class PaketController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StorepaketRequest  $request
+     * @param  \App\Http\Requests\PaketRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorepaketRequest $request)
+    public function store(PaketRequest $request)
     {
-        //
+        $data = $request->all();
+
+        Paket::create($data);
+        return redirect('paket');
     }
 
     /**
@@ -68,9 +78,13 @@ class PaketController extends Controller
      * @param  \App\Models\paket  $paket
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatepaketRequest $request, paket $paket)
+    public function update(PaketRequest $request, $id)
     {
-        //
+        $data = $request->all();
+        $items = Paket::findOrFail($id);
+        $items->update($data);
+        return redirect()->back()->with('message', 'Data berhasil diupdate!');
+
     }
 
     /**
@@ -79,8 +93,11 @@ class PaketController extends Controller
      * @param  \App\Models\paket  $paket
      * @return \Illuminate\Http\Response
      */
-    public function destroy(paket $paket)
+    public function destroy($id)
     {
-        //
+        $items = Paket::findOrFail($id);
+        $items->delete();
+        return redirect()->back()->with('message', 'Data berhasil ditambahkan!');
     }
+
 }

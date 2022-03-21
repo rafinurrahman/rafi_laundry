@@ -16,10 +16,12 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email', 250);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->integer('id_outlet');
+            $table->enum('role',['admin','kasir','owner']);
             $table->timestamps();
         });
     }
@@ -29,6 +31,13 @@ class CreateUsersTable extends Migration
      *
      * @return void
      */
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+    }
+    
     public function down()
     {
         Schema::dropIfExists('users');

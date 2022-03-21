@@ -13,7 +13,7 @@ class StorepaketRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,11 @@ class StorepaketRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'id_paket' => 'required|max:100',
+            'id_outlet' => 'required',
+            'jenis' => 'required',
+            'nama_paket' => 'required',
+            'harga' => 'required'
         ];
     }
 }
